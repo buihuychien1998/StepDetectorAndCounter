@@ -26,16 +26,16 @@ public class MainActivity extends AppCompatActivity {
                 StepService stepService = ((StepService.StepBinder) service).getService();
                 String planWalkQTY = SharedPreferencesUtils.getInstance()
                     .get(Constant.KEY_PLAN_WALK_QTY, String.class, Constant.PLAN_WALK_QTY_DEFAULT);
-                mBinding.textStep.setText(stepService.getStepCount());
+                mBinding.textStep.setText(String.valueOf(stepService.getStepCount()));
                 // TODO: 21/08/2017
                 stepService.registerCallback(new UpdateUiCallBack() {
                     @Override
                     public void updateUi(int stepCount) {
                         // TODO: 21/08/2017
-                        String planWalkQTY = SharedPreferencesUtils.getInstance()
-                            .get(Constant.KEY_PLAN_WALK_QTY, String.class,
-                                Constant.PLAN_WALK_QTY_DEFAULT);
-                        mBinding.textStep.setText(planWalkQTY);
+//                        String planWalkQTY = SharedPreferencesUtils.getInstance()
+//                            .get(Constant.KEY_PLAN_WALK_QTY, String.class,
+//                                Constant.PLAN_WALK_QTY_DEFAULT);
+                        mBinding.textStep.setText(String.valueOf(stepCount));
                     }
                 });
             }
