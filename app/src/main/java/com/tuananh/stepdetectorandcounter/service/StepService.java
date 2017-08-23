@@ -20,11 +20,13 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.tuananh.stepdetectorandcounter.R;
-import com.tuananh.stepdetectorandcounter.step.StepCount;
 import com.tuananh.stepdetectorandcounter.step.UpdateUiCallBack;
+import com.tuananh.stepdetectorandcounter.utils.CommonUtils;
+import com.tuananh.stepdetectorandcounter.utils.SharedPreferencesUtils;
 import com.tuananh.stepdetectorandcounter.view.activity.MainActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -39,7 +41,6 @@ public class StepService extends Service implements SensorEventListener {
     private BroadcastReceiver mBroadcastReceiver;
     private StepBinder mStepBinder = new StepBinder();
     private SensorManager mSensorManager;
-    private StepCount mStepCount;
     private String mCurrentDate = "";
     private int mCurrentStep;
     private int mNotifyIdStep = 100;
@@ -58,7 +59,6 @@ public class StepService extends Service implements SensorEventListener {
                 startStepDetector();
             }
         }).start();
-//        startTimeCount();
     }
 
     @Nullable
@@ -118,12 +118,12 @@ public class StepService extends Service implements SensorEventListener {
     }
 
     public PendingIntent getDefaultIntent(int flags) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, new Intent(), flags);
-        return pendingIntent;
+        return PendingIntent.getActivity(this, 1, new Intent(), flags);
     }
 
     private void initTodayData() {
         mCurrentDate = getTodayDate();
+        mCurrentStep = CommonUtils.getStepNumber();
         updateNotification();
     }
 
@@ -152,18 +152,23 @@ public class StepService extends Service implements SensorEventListener {
                         break;
                     case Intent.ACTION_CLOSE_SYSTEM_DIALOGS:
                         Log.i(TAG, "receive ACTION_CLOSE_SYSTEM_DIALOGS");
+                        saveData();
                         break;
                     case Intent.ACTION_SHUTDOWN:
                         Log.i(TAG, "receive ACTION_SHUTDOWN");
+                        saveData();
                         break;
                     case Intent.ACTION_DATE_CHANGED:
                         Log.i(TAG, "receive ACTION_DATE_CHANGED");
+                        saveData();
                         break;
                     case Intent.ACTION_TIME_CHANGED:
                         Log.i(TAG, "receive ACTION_TIME_CHANGED");
+                        saveData();
                         break;
                     case Intent.ACTION_TIME_TICK:
                         Log.i(TAG, "receive ACTION_TIME_TICK");
+                        saveData();
                         break;
                 }
             }
@@ -228,6 +233,13 @@ public class StepService extends Service implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
+    }
+
+    public void saveData() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy_MM_dd");
+        String key = simpleDateFormat.format(calendar.getTime());
+        SharedPreferencesUtils.getInstance().put(key, mCurrentStep);
     }
 
     public class StepBinder extends Binder {

@@ -11,10 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.tuananh.stepdetectorandcounter.R;
 import com.tuananh.stepdetectorandcounter.databinding.ActivityMainBinding;
-import com.tuananh.stepdetectorandcounter.model.Constant;
 import com.tuananh.stepdetectorandcounter.service.StepService;
 import com.tuananh.stepdetectorandcounter.step.UpdateUiCallBack;
-import com.tuananh.stepdetectorandcounter.utils.SharedPreferencesUtils;
+import com.tuananh.stepdetectorandcounter.utils.CommonUtils;
 
 public class MainActivity extends AppCompatActivity {
     private boolean mIsBind;
@@ -24,18 +23,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder service) {
                 StepService stepService = ((StepService.StepBinder) service).getService();
-                String planWalkQTY = SharedPreferencesUtils.getInstance()
-                    .get(Constant.KEY_PLAN_WALK_QTY, String.class, Constant.PLAN_WALK_QTY_DEFAULT);
-                mBinding.textStep.setText(String.valueOf(stepService.getStepCount()));
-                // TODO: 21/08/2017
+                showStepCount(CommonUtils.getStepNumber(),
+                    stepService.getStepCount());
                 stepService.registerCallback(new UpdateUiCallBack() {
                     @Override
                     public void updateUi(int stepCount) {
-                        // TODO: 21/08/2017
-//                        String planWalkQTY = SharedPreferencesUtils.getInstance()
-//                            .get(Constant.KEY_PLAN_WALK_QTY, String.class,
-//                                Constant.PLAN_WALK_QTY_DEFAULT);
-                        mBinding.textStep.setText(String.valueOf(stepCount));
+                        showStepCount(CommonUtils.getStepNumber(), stepCount);
                     }
                 });
             }
@@ -45,6 +38,13 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+    public void showStepCount(int totalStepNum, int currentCounts) {
+        if (currentCounts < totalStepNum) {
+            currentCounts = totalStepNum;
+        }
+        mBinding.textStep.setText(String.valueOf(currentCounts));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        showStepCount(CommonUtils.getStepNumber(), 0);
         setupService();
     }
 
