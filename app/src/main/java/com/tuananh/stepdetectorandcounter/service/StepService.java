@@ -25,10 +25,6 @@ import com.tuananh.stepdetectorandcounter.utils.CommonUtils;
 import com.tuananh.stepdetectorandcounter.utils.SharedPreferencesUtils;
 import com.tuananh.stepdetectorandcounter.view.activity.MainActivity;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 /**
  * Created by FRAMGIA\vu.tuan.anh on 21/08/2017.
  */
@@ -41,7 +37,6 @@ public class StepService extends Service implements SensorEventListener {
     private BroadcastReceiver mBroadcastReceiver;
     private StepBinder mStepBinder = new StepBinder();
     private SensorManager mSensorManager;
-    private String mCurrentDate = "";
     private int mCurrentStep;
     private int mNotifyIdStep = 100;
     private int mHasStepCount = 0;
@@ -111,18 +106,11 @@ public class StepService extends Service implements SensorEventListener {
         return mCurrentStep;
     }
 
-    private String getTodayDate() {
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(date);
-    }
-
     public PendingIntent getDefaultIntent(int flags) {
         return PendingIntent.getActivity(this, 1, new Intent(), flags);
     }
 
     private void initTodayData() {
-        mCurrentDate = getTodayDate();
         mCurrentStep = CommonUtils.getStepNumber();
         updateNotification();
     }
@@ -212,6 +200,7 @@ public class StepService extends Service implements SensorEventListener {
         switch (mStepSensorType) {
             case Sensor.TYPE_STEP_COUNTER:
                 int tempStep = (int) sensorEvent.values[0];
+                Log.d(TAG, "tempStep = " + tempStep);
                 if (!mHasRecord) {
                     mHasRecord = true;
                     mHasStepCount = tempStep;
@@ -236,10 +225,7 @@ public class StepService extends Service implements SensorEventListener {
     }
 
     public void saveData() {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy_MM_dd");
-        String key = simpleDateFormat.format(calendar.getTime());
-        SharedPreferencesUtils.getInstance().put(key, mCurrentStep);
+        SharedPreferencesUtils.getInstance().put(CommonUtils.getKeyToday(), mCurrentStep);
     }
 
     public class StepBinder extends Binder {
