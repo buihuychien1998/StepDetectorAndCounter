@@ -1,9 +1,9 @@
-package com.tuananh.stepdetectorandcounter.utils;
+package com.example.stepdetectorandcounter.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.tuananh.stepdetectorandcounter.App;
+import com.example.stepdetectorandcounter.App;
 
 /**
  * Created by FRAMGIA\vu.tuan.anh on 21/08/2017.

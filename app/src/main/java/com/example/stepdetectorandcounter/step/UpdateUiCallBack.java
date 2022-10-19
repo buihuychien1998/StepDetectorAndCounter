@@ -1,4 +1,4 @@
-package com.tuananh.stepdetectorandcounter.step;
+package com.example.stepdetectorandcounter.step;
 
 /**
  * Created by FRAMGIA\vu.tuan.anh on 21/08/2017.

@@ -1,4 +1,4 @@
-package com.tuananh.stepdetectorandcounter;
+package com.example.stepdetectorandcounter;
 
 import android.app.Application;
 

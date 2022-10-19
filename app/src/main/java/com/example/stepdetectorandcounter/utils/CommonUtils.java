@@ -1,6 +1,6 @@
-package com.tuananh.stepdetectorandcounter.utils;
+package com.example.stepdetectorandcounter.utils;
 
-import com.tuananh.stepdetectorandcounter.model.Constant;
+import com.example.stepdetectorandcounter.model.Constant;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -1,19 +1,20 @@
-package com.tuananh.stepdetectorandcounter.view.activity;
+package com.example.stepdetectorandcounter.view.activity;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.databinding.DataBindingUtil;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 
-import com.tuananh.stepdetectorandcounter.R;
-import com.tuananh.stepdetectorandcounter.databinding.ActivityMainBinding;
-import com.tuananh.stepdetectorandcounter.service.StepService;
-import com.tuananh.stepdetectorandcounter.step.UpdateUiCallBack;
-import com.tuananh.stepdetectorandcounter.utils.CommonUtils;
+import com.example.stepdetectorandcounter.R;
+import com.example.stepdetectorandcounter.databinding.ActivityMainBinding;
+import com.example.stepdetectorandcounter.service.StepService;
+import com.example.stepdetectorandcounter.step.UpdateUiCallBack;
+import com.example.stepdetectorandcounter.utils.CommonUtils;
 
 public class MainActivity extends AppCompatActivity {
     private boolean mIsBind;

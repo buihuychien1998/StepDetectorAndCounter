@@ -1,6 +1,7 @@
-package com.tuananh.stepdetectorandcounter.service;
+package com.example.stepdetectorandcounter.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -8,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,15 +17,15 @@ import android.hardware.SensorManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
-import com.tuananh.stepdetectorandcounter.R;
-import com.tuananh.stepdetectorandcounter.step.UpdateUiCallBack;
-import com.tuananh.stepdetectorandcounter.utils.CommonUtils;
-import com.tuananh.stepdetectorandcounter.utils.SharedPreferencesUtils;
-import com.tuananh.stepdetectorandcounter.view.activity.MainActivity;
+import com.example.stepdetectorandcounter.R;
+import com.example.stepdetectorandcounter.step.UpdateUiCallBack;
+import com.example.stepdetectorandcounter.utils.CommonUtils;
+import com.example.stepdetectorandcounter.utils.SharedPreferencesUtils;
+import com.example.stepdetectorandcounter.view.activity.MainActivity;
 
 /**
  * Created by FRAMGIA\vu.tuan.anh on 21/08/2017.
@@ -165,7 +167,8 @@ public class StepService extends Service implements SensorEventListener {
     }
 
     private void initNotification() {
-        mBuilder = new NotificationCompat.Builder(this);
+        String CHANNEL_ID = "CHANNEL_ID";
+        mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
         mBuilder.setContentTitle(getResources().getString(R.string.app_name))
             .setContentText("The number of steps today: " + mCurrentStep + " step")
             .setContentIntent(getDefaultIntent(Notification.FLAG_ONGOING_EVENT))
@@ -176,6 +179,12 @@ public class StepService extends Service implements SensorEventListener {
             .setSmallIcon(R.mipmap.ic_launcher);
         Notification notification = mBuilder.build();
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel chan = new NotificationChannel(CHANNEL_ID, "channelName", NotificationManager.IMPORTANCE_NONE);
+            chan.setLightColor(Color.BLUE);
+            chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            mNotificationManager.createNotificationChannel(chan);
+        }
         startForeground(mNotifyIdStep, notification);
     }
 
